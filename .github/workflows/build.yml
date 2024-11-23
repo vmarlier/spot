@@ -2,7 +2,11 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "fix/basic-ci" ]
+
+permissions:
+  contents: read
+  packages: write # needed for ghcr.io access
 
 jobs:
   build:
@@ -11,8 +15,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Login to GHCR
+      uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2
+      with:
+        registry: ghcr.io
+        username: "vmarlier"
+        password: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ghcr.io/vmarlier/dummy-tester:$(github.sha)
+      run: docker build . --file Dockerfile --tag ghcr.io/vmarlier/dummy-tester:${{ github.sha }}
 
     - name: Push the Docker image
-      run: docker push ghcr.io/vmarlier/dummy-tester:$(github.sha)
+      run: docker push ghcr.io/vmarlier/dummy-tester:${{ github.sha }}
