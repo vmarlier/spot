@@ -4,38 +4,15 @@ Single Point of Testing
 
 ## TODO
 
-[ ] Decide naming convention for API
+See [project](https://github.com/users/vmarlier/projects/1)
 
-[ ] Feature 1
-POST request with body describing the request to send to which target and the expected answer.
-e.g.:
-```txt
-POST /v1/request/send
-{
-    "target": "localhost:8080",
-    "path": "/test",
-    "body": "{}",
-    "expectedAnswer": "200",
-}
-```
+## API Design Overview
 
-[ ] Feature 2
-POST request with body describing the number of requests to send to which target and the expected answers.
-e.g.:
-```txt
-POST /v1/request/sendMass
-{
-    "target": "localhost:8080",
-    "path": "/test",
-    "body": "{}",
-    "volume": "200",
-    "elapsed": "10ms",
-    "expectedBehaviour": {
-        "whileHealthyStatusCode": 200,
-        "whileUnhealthyStatusCode": "4xx, 5xx",
-    }
-}
-```
+This service follows a REST-RPC hybrid approach with no data storage. Each request is processed immediately, and responses are returned without persistence.
 
-[ ] Create a GET help handler to receive all available endpoints
-[ ] Create a health handler
+Endpoints:
+- POST /v1/tests/execute – Runs a network test with the given parameters.
+- POST /v1/requests/trigger – Sends a single request and returns the response.
+- POST /v1/requests/batch/trigger – Sends multiple requests based on defined parameters.
+
+All operations are stateless. If logging or result history is needed, it must be handled externally.
