@@ -1,4 +1,4 @@
-module dummy-tester
+module github.com/vmarlier/spot
 
 go 1.22.1
 
